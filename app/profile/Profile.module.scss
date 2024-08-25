@@ -1,0 +1,49 @@
+/* Profile.module.scss */
+
+$container-padding: 20px;
+$tweets-margin-top: 20px;
+$header-font-size: 28px;
+$subheader-font-size: 20px;
+$text-color: #333;
+$background-color: #f5f8fa;
+$tweet-background-color: #ffffff;
+$tweet-border-color: #e1e8ed;
+
+.container {
+  padding: $container-padding;
+  background-color: $background-color;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profileHeader {
+  margin-bottom: $tweets-margin-top;
+  font-size: $header-font-size;
+  font-weight: bold;
+  color: $text-color;
+}
+
+.subheader {
+  font-size: $subheader-font-size;
+  margin-bottom: $tweets-margin-top;
+  color: $text-color;
+}
+
+.tweets {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tweet {
+  background-color: $tweet-background-color;
+  border: 1px solid $tweet-border-color;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: $text-color;
+}

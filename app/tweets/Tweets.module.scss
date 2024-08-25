@@ -1,0 +1,86 @@
+/* Tweets.module.scss */
+
+$container-padding: 20px;
+$form-width: 100%;
+$form-max-width: 600px;
+$input-padding: 10px;
+$input-border-radius: 5px;
+$input-border: 1px solid #ccc;
+$button-background-color: #1da1f2;
+$button-text-color: white;
+$button-padding: 10px;
+$button-border-radius: 5px;
+$button-hover-background-color: darken($button-background-color, 10%);
+$button-transition: background-color 0.3s ease;
+$tweet-border: 1px solid #e1e8ed;
+$tweet-padding: 15px;
+$tweet-border-radius: 10px;
+$tweet-margin-bottom: 15px;
+$tweet-background-color: #ffffff;
+$tweet-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+.container {
+  padding: $container-padding;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f5f8fa;
+  min-height: 100vh;
+}
+
+.form {
+  width: $form-width;
+  max-width: $form-max-width;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.input {
+  padding: $input-padding;
+  margin-bottom: 10px;
+  border: $input-border;
+  border-radius: $input-border-radius;
+  font-size: 16px;
+
+  &:focus {
+    outline: none;
+    border-color: $button-background-color;
+    box-shadow: 0 0 5px rgba(29, 161, 242, 0.5);
+  }
+}
+
+.button {
+  background-color: $button-background-color;
+  color: $button-text-color;
+  padding: $button-padding;
+  border: none;
+  border-radius: $button-border-radius;
+  font-size: 16px;
+  cursor: pointer;
+  transition: $button-transition;
+
+  &:hover {
+    background-color: $button-hover-background-color;
+  }
+}
+
+.tweets {
+  width: $form-width;
+  max-width: $form-max-width;
+  display: flex;
+  flex-direction: column;
+}
+
+.tweet {
+  background-color: $tweet-background-color;
+  border: $tweet-border;
+  padding: $tweet-padding;
+  border-radius: $tweet-border-radius;
+  margin-bottom: $tweet-margin-bottom;
+  box-shadow: $tweet-box-shadow;
+}

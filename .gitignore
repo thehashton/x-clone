@@ -14,11 +14,14 @@
 /out/
 
 # production
+.env
 /build
 
 # misc
+.idea/
 .DS_Store
 *.pem
+pnpm-lock.yaml
 
 # debug
 npm-debug.log*
