@@ -88,14 +88,6 @@ export default function MainContent() {
     }
   };
 
-  if (!user) {
-    return (
-      <>
-        <p>Please log in to tweet.</p>
-      </>
-    );
-  }
-
   return (
     <div className={styles.mainContent}>
       <div className={styles.topMenu}>
@@ -145,20 +137,24 @@ export default function MainContent() {
       </form>
       <div className={styles.showPosts}>Show 105 posts</div>
       <div className={styles.feed}>
-        {tweets.map((tweet) => (
-          <div key={tweet.id} className={styles.tweet}>
-            <Tweet
-              avatarUrl={avatarUrl}
-              name={tweet.name}
-              handle={"TheHashton"}
-              time={tweet.time} // Now in 'August 8, 2024' format
-              content={tweet.content}
-              comments={tweet.comments}
-              retweets={tweet.retweets}
-              likes={tweet.likes}
-            />
-          </div>
-        ))}
+        {user ? (
+          tweets.map((tweet) => (
+            <div key={tweet.id} className={styles.tweet}>
+              <Tweet
+                avatarUrl={avatarUrl}
+                name={tweet.name}
+                handle={"TheHashton"}
+                time={tweet.time} // Now in 'August 8, 2024' format
+                content={tweet.content}
+                comments={tweet.comments}
+                retweets={tweet.retweets}
+                likes={tweet.likes}
+              />
+            </div>
+          ))
+        ) : (
+          <p className={styles.loginMessage}>Please log in to tweet.</p>
+        )}
       </div>
     </div>
   );
