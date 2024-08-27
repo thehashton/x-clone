@@ -8,6 +8,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import styles from "./Signup.module.scss";
 import { PiXLogoBold } from "react-icons/pi";
+import Link from "next/link";
 
 export default function SignUp() {
   const [email, setEmail] = useState<string>("");
@@ -133,9 +134,9 @@ export default function SignUp() {
       </p>
       <p className={styles.footerText}>
         Have an account already?{" "}
-        <a href="#" className={styles.link}>
+        <Link href="/login" className={styles.link}>
           Log in
-        </a>
+        </Link>
       </p>
     </div>
   );

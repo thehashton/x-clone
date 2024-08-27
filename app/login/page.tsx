@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import styles from "./Login.module.scss";
 import { PiXLogoBold } from "react-icons/pi";
 import Toast from "@/components/Toast";
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -63,7 +64,7 @@ export default function Login() {
           Forgot password?
         </a>
         <div className={styles.signupLink}>
-          Don’t have an account? <a href="#">Sign up</a>
+          Don’t have an account? <Link href="/signup">Sign up</Link>
         </div>
       </div>
       {showToast && (
