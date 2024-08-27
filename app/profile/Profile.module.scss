@@ -1,49 +1,93 @@
-/* Profile.module.scss */
+// Profile.module.scss
 
-$container-padding: 20px;
-$tweets-margin-top: 20px;
-$header-font-size: 28px;
-$subheader-font-size: 20px;
-$text-color: #333;
-$background-color: #f5f8fa;
-$tweet-background-color: #ffffff;
-$tweet-border-color: #e1e8ed;
+.profileContainer {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #000;
+  color: #fff;
+  font-family: 'TwitterChirp', sans-serif;
+}
 
-.container {
-  padding: $container-padding;
-  background-color: $background-color;
-  min-height: 100vh;
+.header {
+  position: relative;
+}
+
+.banner {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.avatarContainer {
+  position: absolute;
+  bottom: -50px;
+  left: 20px;
   display: flex;
-  flex-direction: column;
   align-items: center;
 }
 
-.profileHeader {
-  margin-bottom: $tweets-margin-top;
-  font-size: $header-font-size;
-  font-weight: bold;
-  color: $text-color;
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 5px solid #000;
 }
 
-.subheader {
-  font-size: $subheader-font-size;
-  margin-bottom: $tweets-margin-top;
-  color: $text-color;
+.editProfileButton {
+  margin-left: 15px;
+  padding: 8px 16px;
+  background-color: #1da1f2;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: #1991da;
+  }
+
+  .editIcon {
+    margin-right: 5px;
+  }
+}
+
+.profileDetails {
+  margin-top: 60px;
+  padding: 0 20px;
+}
+
+.fullName {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.username {
+  color: #6e767d;
+  margin-bottom: 10px;
+}
+
+.bio, .location, .joinDate {
+  margin-bottom: 5px;
+}
+
+.stats {
+  margin: 20px 0;
+  display: flex;
+  gap: 15px;
 }
 
 .tweets {
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
+  margin-top: 30px;
 }
 
 .tweet {
-  background-color: $tweet-background-color;
-  border: 1px solid $tweet-border-color;
+  background-color: #15181c;
   padding: 15px;
   border-radius: 10px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: $text-color;
+  margin-bottom: 10px;
 }

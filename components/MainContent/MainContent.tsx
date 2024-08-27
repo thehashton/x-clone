@@ -1,15 +1,18 @@
 "use client";
-
 import { useState, useEffect } from "react";
-import { useAuth } from "@/context/AuthContext";
 import {
   collection,
   addDoc,
   query,
   orderBy,
   getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
-import { db } from "@/lib/firebaseConfig";
+import { db, auth } from "@/lib/firebaseConfig";
+import { useAuth } from "@/context/AuthContext";
 import {
   FaImage,
   FaSmile,
@@ -27,6 +30,8 @@ export default function MainContent() {
   const [newTweet, setNewTweet] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [activeMenu, setActiveMenu] = useState("For you");
+  const [fullName, setFullName] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const { user } = useAuth();
   const avatarUrl = "https://randomuser.me/api/portraits/men/9.jpg"; // Specific avatar URL
 
@@ -57,7 +62,21 @@ export default function MainContent() {
         console.error("Error fetching tweets:", error);
       }
     };
+
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setFullName(data.fullName);
+          setUsername(data.username);
+        }
+      }
+    };
+
     fetchTweets();
+    fetchUserData();
   }, []);
 
   const handleMenuClick = (menu: string) => {
@@ -70,13 +89,19 @@ export default function MainContent() {
     if (newTweet.trim().length > 1 && user) {
       try {
         setIsSubmitting(true);
+        const createdAt = new Date();
         const tweetData = {
           content: newTweet,
           userId: user.uid,
-          createdAt: new Date(),
+          createdAt, // Save the raw date object to Firebase
+          time: createdAt.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }), // Format the date string for immediate display
         };
         const docRef = await addDoc(collection(db, "tweets"), tweetData);
-        setTweets([{ id: docRef.id, ...tweetData }, ...tweets]);
+        setTweets([{ id: docRef.id, ...tweetData }, ...tweets]); // Include time in the new tweet object
         setNewTweet("");
       } catch (error) {
         console.error("Error submitting tweet:", error);
@@ -86,6 +111,12 @@ export default function MainContent() {
     } else {
       console.log("Tweet not submitted. Missing content or user.");
     }
+  };
+
+  const handleDeleteTweet = (tweetId: string) => {
+    setTweets((prevTweets) =>
+      prevTweets.filter((tweet) => tweet.id !== tweetId),
+    );
   };
 
   return (
@@ -100,7 +131,9 @@ export default function MainContent() {
         ].map((menu) => (
           <button
             key={menu}
-            className={`${styles.menuItem} ${activeMenu === menu ? styles.active : ""}`}
+            className={`${styles.menuItem} ${
+              activeMenu === menu ? styles.active : ""
+            }`}
             onClick={() => handleMenuClick(menu)}
           >
             {menu}
@@ -141,14 +174,16 @@ export default function MainContent() {
           tweets.map((tweet) => (
             <div key={tweet.id} className={styles.tweet}>
               <Tweet
+                tweetId={tweet.id}
                 avatarUrl={avatarUrl}
-                name={tweet.name}
-                handle={"TheHashton"}
-                time={tweet.time} // Now in 'August 8, 2024' format
+                name={fullName}
+                handle={username}
+                time={tweet.time}
                 content={tweet.content}
                 comments={tweet.comments}
                 retweets={tweet.retweets}
                 likes={tweet.likes}
+                onDelete={() => handleDeleteTweet(tweet.id)}
               />
             </div>
           ))
