@@ -8,8 +8,6 @@ import {
   getDocs,
   doc,
   getDoc,
-  updateDoc,
-  deleteDoc,
 } from "firebase/firestore";
 import { db, auth } from "@/lib/firebaseConfig";
 import { useAuth } from "@/context/AuthContext";
@@ -174,6 +172,7 @@ export default function MainContent() {
           tweets.map((tweet) => (
             <div key={tweet.id} className={styles.tweet}>
               <Tweet
+                key={tweet.id}
                 tweetId={tweet.id}
                 avatarUrl={avatarUrl}
                 name={fullName}
@@ -183,7 +182,7 @@ export default function MainContent() {
                 comments={tweet.comments}
                 retweets={tweet.retweets}
                 likes={tweet.likes}
-                onDelete={() => handleDeleteTweet(tweet.id)}
+                onDelete={handleDeleteTweet} // Pass the handler function here
               />
             </div>
           ))
