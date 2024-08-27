@@ -1,4 +1,6 @@
 "use client";
+
+import { useState } from "react";
 import {
   HiOutlineHome,
   HiOutlineSearch,
@@ -11,12 +13,10 @@ import { RiFileList2Line, RiBookmarkLine } from "react-icons/ri";
 import { FiHash, FiMoreHorizontal } from "react-icons/fi";
 import { BsLightningCharge, BsPerson, BsBriefcase } from "react-icons/bs";
 import { MdOutlineGroups } from "react-icons/md";
-import { useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebaseConfig";
+import { useAuth } from "@/context/AuthContext";
 import styles from "./Sidebar.module.scss";
 
 interface SidebarProps {
@@ -26,25 +26,8 @@ interface SidebarProps {
 export default function Sidebar({ avatarUrl }: SidebarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [fullName, setFullName] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
+  const { user } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          setFullName(data.fullName);
-          setUsername(data.username);
-        }
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -53,11 +36,11 @@ export default function Sidebar({ avatarUrl }: SidebarProps) {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      setShowToast(true); // Show the toast message
+      setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
-        router.push("/login"); // Redirect to the login page
-      }, 2000); // Hide the toast after 2 seconds
+        router.push("/login");
+      }, 2000);
     } catch (error) {
       console.error("Failed to sign out:", error);
     }
@@ -100,10 +83,7 @@ export default function Sidebar({ avatarUrl }: SidebarProps) {
           <li className={styles.menuItem}>
             <MdOutlineGroups className={styles.icon} /> Communities
           </li>
-          <li
-            className={styles.menuItem}
-            onClick={() => router.push("/profile")}
-          >
+          <li className={styles.menuItem}>
             <BsPerson className={styles.icon} /> Profile
           </li>
           <li className={styles.menuItem}>
@@ -124,26 +104,34 @@ export default function Sidebar({ avatarUrl }: SidebarProps) {
           <span className={styles.postText}>Post</span>
         </button>
       </div>
-      <div className={styles.miniProfile} onClick={toggleMenu}>
-        <img src={avatarUrl} alt="User" className={styles.avatar} />
-        <div className={styles.profileDetails}>
-          <span className={styles.name}>
-            {fullName} <PiSealCheckFill className={styles.verifiedIcon} />
-          </span>
-          <span className={styles.username}>@{username}</span>
-        </div>
-        <FiMoreHorizontal className={styles.moreIcon} />
-        {isMenuOpen && (
-          <div className={styles.profileMenu}>
-            <div className={styles.profileMenuItem}>
-              Add an existing account
-            </div>
-            <div className={styles.profileMenuItem} onClick={handleSignOut}>
-              Log out @{username}
-            </div>
+
+      {user ? (
+        <div className={styles.miniProfile} onClick={toggleMenu}>
+          <img src={avatarUrl} alt="User" className={styles.avatar} />
+          <div className={styles.profileDetails}>
+            <span className={styles.name}>
+              {user.displayName || "User"}{" "}
+              <PiSealCheckFill className={styles.verifiedIcon} />
+            </span>
+            <span className={styles.username}>
+              @{user.displayName || "guest"}
+            </span>
           </div>
-        )}
-      </div>
+          <FiMoreHorizontal className={styles.moreIcon} />
+          {isMenuOpen && (
+            <div className={styles.profileMenu}>
+              <div className={styles.profileMenuItem} onClick={handleSignOut}>
+                Log out @{user.displayName || "guest"}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <button onClick={handleSignOut} className={styles.loginButton}>
+          Log in
+        </button>
+      )}
+
       {showToast && <div className={styles.toast}>Signed out successfully</div>}
     </div>
   );

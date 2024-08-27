@@ -18,6 +18,7 @@ import {
   FaMapMarkerAlt,
   FaBold,
   FaItalic,
+  FaUserCircle, // Import the user icon
 } from "react-icons/fa";
 import styles from "./MainContent.module.scss";
 import Tweet from "@/components/Tweet";
@@ -31,7 +32,11 @@ export default function MainContent() {
   const [fullName, setFullName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const { user } = useAuth();
-  const avatarUrl = "https://randomuser.me/api/portraits/men/9.jpg"; // Specific avatar URL
+
+  // If user is logged in, use their avatar. Otherwise, use the FaUserCircle icon.
+  const avatarUrl = user
+    ? "https://randomuser.me/api/portraits/men/9.jpg" // Specific avatar URL for logged-in user
+    : null; // No URL when user is not logged in
 
   useEffect(() => {
     const fetchTweets = async () => {
@@ -144,7 +149,11 @@ export default function MainContent() {
       </div>
       <form onSubmit={handleSubmit} className={styles.tweetInput}>
         <div className={styles.inputContainer}>
-          <img src={avatarUrl} alt="User" className={styles.profileImage} />
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="User" className={styles.profileImage} />
+          ) : (
+            <FaUserCircle className={styles.profileIcon} /> // Use the icon if user is not logged in
+          )}
           <textarea
             placeholder="What is happening?!"
             value={newTweet}
@@ -177,7 +186,7 @@ export default function MainContent() {
             <div key={tweet.id} className={styles.tweet}>
               <Tweet
                 tweetId={tweet.id}
-                avatarUrl={avatarUrl}
+                avatarUrl={avatarUrl || ""}
                 name={fullName}
                 handle={username}
                 time={tweet.time}

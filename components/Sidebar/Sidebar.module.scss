@@ -254,3 +254,21 @@
     transform: translateX(-50%) translateY(10px);
   }
 }
+
+.loginButton {
+  background-color: green;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+  width: 100%;
+
+  &:hover {
+    background-color: #004700;
+  }
+}
