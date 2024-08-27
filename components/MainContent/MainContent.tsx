@@ -10,7 +10,6 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { db, auth } from "@/lib/firebaseConfig";
-import { useAuth } from "@/context/AuthContext";
 import {
   FaImage,
   FaSmile,
@@ -22,6 +21,7 @@ import {
 } from "react-icons/fa";
 import styles from "./MainContent.module.scss";
 import Tweet from "@/components/Tweet";
+import { useAuth } from "@/context/AuthContext";
 
 export default function MainContent() {
   const [tweets, setTweets] = useState<any[]>([]);
@@ -87,19 +87,23 @@ export default function MainContent() {
     if (newTweet.trim().length > 1 && user) {
       try {
         setIsSubmitting(true);
-        const createdAt = new Date();
         const tweetData = {
           content: newTweet,
           userId: user.uid,
-          createdAt, // Save the raw date object to Firebase
-          time: createdAt.toLocaleDateString("en-US", {
+          createdAt: new Date(),
+        };
+        const docRef = await addDoc(collection(db, "tweets"), tweetData);
+        const date = new Date();
+        const newTweetData = {
+          id: docRef.id,
+          ...tweetData,
+          time: date.toLocaleDateString("en-US", {
             year: "numeric",
             month: "long",
             day: "numeric",
-          }), // Format the date string for immediate display
+          }),
         };
-        const docRef = await addDoc(collection(db, "tweets"), tweetData);
-        setTweets([{ id: docRef.id, ...tweetData }, ...tweets]); // Include time in the new tweet object
+        setTweets([newTweetData, ...tweets]);
         setNewTweet("");
       } catch (error) {
         console.error("Error submitting tweet:", error);
@@ -172,7 +176,6 @@ export default function MainContent() {
           tweets.map((tweet) => (
             <div key={tweet.id} className={styles.tweet}>
               <Tweet
-                key={tweet.id}
                 tweetId={tweet.id}
                 avatarUrl={avatarUrl}
                 name={fullName}

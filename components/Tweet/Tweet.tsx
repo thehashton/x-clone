@@ -5,13 +5,8 @@ import {
   FaRegHeart,
   FaShare,
   FaHeart,
+  FaEllipsisH,
   FaChartBar,
-  FaTrashAlt, // Import Trash icon for delete
-  FaThumbtack, // Import Pin icon for pin/unpin
-  FaListAlt, // Import List icon for add/remove from Highlights
-  FaReply, // Import Reply icon for change who can reply
-  FaSignal, // Import Engagement icon for view engagements
-  FaExternalLinkAlt, // Import Embed icon for embed post
 } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { PiSealCheckFill } from "react-icons/pi";
@@ -29,7 +24,7 @@ interface TweetProps {
   comments: number;
   retweets: number;
   likes: number;
-  onDelete: () => void;
+  onDelete: (tweetId: string) => void; // Updated type to expect tweetId
 }
 
 export default function Tweet({
@@ -49,14 +44,11 @@ export default function Tweet({
   const [likeCount, setLikeCount] = useState(likes);
   const [isLiked, setIsLiked] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [impressions] = useState<number>(
-    Math.floor(Math.random() * (5000000 - 1000 + 1)) + 1000,
-  ); // Randomize impressions
 
   const handleMenuToggle = () => setShowMenu(!showMenu);
 
   const handleLike = async () => {
-    const newLikeCount = likeCount + 1;
+    const newLikeCount = isLiked ? likeCount - 1 : likeCount + 1;
     setIsLiked(!isLiked);
     setLikeCount(newLikeCount);
 
@@ -124,38 +116,19 @@ export default function Tweet({
           />
           {showMenu && (
             <div className={styles.menu}>
-              <div
-                onClick={handleDelete}
-                className={`${styles.menuItem} ${styles.redMenuItem}`}
-              >
-                <FaTrashAlt className={styles.menuIcon} /> Delete
+              <div onClick={handleDelete} className={styles.menuItem}>
+                Delete
               </div>
+              <div className={styles.menuItem}>Unpin from profile</div>
+              <div className={styles.menuItem}>Add/remove from Highlights</div>
               <div className={styles.menuItem}>
-                <FaThumbtack className={styles.menuIcon} /> Unpin from profile
+                Add/remove @{handle} from Lists
               </div>
-              <div className={styles.menuItem}>
-                <FaListAlt className={styles.menuIcon} /> Add/remove from
-                Highlights
-              </div>
-              <div className={styles.menuItem}>
-                <FaListAlt className={styles.menuIcon} /> Add/remove @{handle}{" "}
-                from Lists
-              </div>
-              <div className={styles.menuItem}>
-                <FaReply className={styles.menuIcon} /> Change who can reply
-              </div>
-              <div className={styles.menuItem}>
-                <FaSignal className={styles.menuIcon} /> View post engagements
-              </div>
-              <div className={styles.menuItem}>
-                <FaExternalLinkAlt className={styles.menuIcon} /> Embed post
-              </div>
-              <div className={styles.menuItem}>
-                <FaSignal className={styles.menuIcon} /> View post analytics
-              </div>
-              <div className={styles.menuItem}>
-                <FaSignal className={styles.menuIcon} /> Request Community Note
-              </div>
+              <div className={styles.menuItem}>Change who can reply</div>
+              <div className={styles.menuItem}>View post engagements</div>
+              <div className={styles.menuItem}>Embed post</div>
+              <div className={styles.menuItem}>View post analytics</div>
+              <div className={styles.menuItem}>Request Community Note</div>
             </div>
           )}
         </div>
@@ -181,7 +154,10 @@ export default function Tweet({
           </div>
           <div className={styles.action}>
             <FaChartBar className={styles.icon} />
-            <span>{impressions.toLocaleString()}</span>
+            <span>
+              {Math.floor(Math.random() * 5000000 + 1000).toLocaleString()}
+            </span>{" "}
+            {/* Randomize impressions */}
           </div>
           <div className={styles.action}>
             <FaShare className={styles.icon} />
