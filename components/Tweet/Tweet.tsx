@@ -39,16 +39,16 @@ export default function Tweet({
   likes,
   onDelete,
 }: TweetProps) {
-  const [commentCount, setCommentCount] = useState(comments);
-  const [retweetCount, setRetweetCount] = useState(retweets);
-  const [likeCount, setLikeCount] = useState(likes);
+  const [commentCount, setCommentCount] = useState(comments || 0);
+  const [retweetCount, setRetweetCount] = useState(retweets || 0);
+  const [likeCount, setLikeCount] = useState(likes || 0);
   const [isLiked, setIsLiked] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   const handleMenuToggle = () => setShowMenu(!showMenu);
 
   const handleLike = async () => {
-    const newLikeCount = isLiked ? likeCount - 1 : likeCount + 1;
+    const newLikeCount = likeCount + 1;
     setIsLiked(!isLiked);
     setLikeCount(newLikeCount);
 
@@ -155,7 +155,7 @@ export default function Tweet({
           <div className={styles.action}>
             <FaChartBar className={styles.icon} />
             <span>
-              {Math.floor(Math.random() * 5000000 + 1000).toLocaleString()}
+              {Math.floor(Math.random() * 1000 + 1000).toLocaleString()}
             </span>{" "}
             {/* Randomize impressions */}
           </div>
