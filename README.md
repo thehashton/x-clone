@@ -1,4 +1,7 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frontend Now X-Clone Tutorial
+> By Harry Ashton
+
+This is a UI Clone of the X social media platform (formerly known as Twitter). It has the login, sign up and tweet feed setup with a Firebase auth. It uses Typescript and CSS modules with SCSS aswell.
 
 ## Getting Started
 
